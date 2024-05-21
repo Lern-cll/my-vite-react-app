@@ -1,6 +1,6 @@
 import React, {ChangeEvent, CSSProperties, ReactElement, ReactNode, useContext, useEffect, useState} from "react";
 import FormContext from "@/components/Form/FormContext";
-import Schema, { Rules } from 'async-validator';
+import Schema from 'async-validator';
 import  classNames from 'classnames';
 export  interface  ItemProps {
     className?: string;
@@ -43,10 +43,10 @@ const Item = (props: ItemProps) => {
     const {values, onValueChange, validateRegister} = useContext(FormContext)
 
     useEffect(() => {
-        if(value !== values?.[name]) {
-            setValue(values?.[name])
+        if(value !== values?.[name as string]) {
+            setValue(values?.[name as string])
         }
-    }, [values, values?.[name]])
+    }, [values, values?.[name as string]])
 
 
 
@@ -70,10 +70,10 @@ const Item = (props: ItemProps) => {
     })
     // 校验
     const handleValidate = (value: any) => {
-        let errorMsg = null;
+        let errorMsg: any = null;
         if(Array.isArray(rules) && rules.length) {
             const validator = new Schema({
-                [name]: rules.map(rule => {
+                [name as string]: rules.map(rule => {
                     return {
                         type: 'string',
                         ...rule
@@ -81,9 +81,9 @@ const Item = (props: ItemProps) => {
                 })
             })
 
-            validator.validate({[name]: value}, (errors) => {
+            validator.validate({[name as string]: value}, (errors) => {
                 if(errors) {
-                    setError(errors[0].message)
+                    setError(errors[0].message as string)
                     errorMsg = errors[0].message
                 }else{
                     setError('')

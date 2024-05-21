@@ -37,7 +37,6 @@ const Form = (props: FormProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        debugger
         for (const [key, callBackFn] of validatorMap.current) {
             if(typeof callBackFn === 'function') {
                 errors.current[key] = callBackFn()
@@ -68,7 +67,7 @@ const Form = (props: FormProps) => {
             onValueChange,
             values,
             setValues: (v) => setValue(v),
-            validateRegister:handleValidateRegister
+            validateRegister: handleValidateRegister
         }}>
             <form className={cls} style={style} onSubmit={handleSubmit} {...others}>
                 {children}
