@@ -23,7 +23,7 @@ const Form = (props: FormProps) => {
         ...others
     } = props;
 
-    const [values, setValues] = useState<Record<string, any>>(initialValues || {})
+    const [values, setValue] = useState<Record<string, any>>(initialValues || {})
 
     // 为啥不用useState ,修改 state 调用 setState 的时候会触发重新渲染, ref 的值保存在 current 属性上，修改它不会触发重新渲染。
     const validatorMap = useRef(new Map<string, Function>())
@@ -37,6 +37,7 @@ const Form = (props: FormProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        debugger
         for (const [key, callBackFn] of validatorMap.current) {
             if(typeof callBackFn === 'function') {
                 errors.current[key] = callBackFn()
@@ -46,7 +47,7 @@ const Form = (props: FormProps) => {
         //  Fill Boolean是什么意思？
         const errList = Object.keys(errors.current).map(key => {
             return errors.current[key]
-        }).fill(Boolean)
+        }).filter(Boolean)
 
         if(errList.length) {
             onFinishFailed?.(errors.current)
@@ -66,7 +67,7 @@ const Form = (props: FormProps) => {
         <FormContext.Provider value={{
             onValueChange,
             values,
-            setValues: (v) => setValues(v),
+            setValues: (v) => setValue(v),
             validateRegister:handleValidateRegister
         }}>
             <form className={cls} style={style} onSubmit={handleSubmit} {...others}>
